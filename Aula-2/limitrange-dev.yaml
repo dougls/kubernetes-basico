@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: api-limit-range
+  namespace: dotnet-api-dev
+spec:
+  limits:
+  - default: # Limite se o dev não especificar
+      cpu: "500m"
+      memory: "512Mi"
+    defaultRequest: # Request mínimo garantido
+      cpu: "250m"
+      memory: "256Mi"
+    type: Container
