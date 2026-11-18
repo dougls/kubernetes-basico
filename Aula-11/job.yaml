@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: fechamento-folha-fiap
+spec:
+  backoffLimit: 3 # Quantas vezes vamos tentar em caso de erro
+  completions: 5 # Quantas vezes a tarefa deve rodar com sucesso
+  parallelism: 2 # Quantos Pods podem rodar ao mesmo tempo
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: processador
+        image: alpine
+        command: ["sh", "-c", "echo 'Processando folha...'; sleep 10; echo 'Sucesso'"]

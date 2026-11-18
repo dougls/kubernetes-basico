@@ -1,0 +1,49 @@
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: minimal-api-net-startup
+#   namespace: prod
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: minimal-api
+#   template:
+#     metadata:
+#       labels:
+#         app: minimal-api
+#     spec:
+#       containers:
+#       - name: api-container
+#         image: minimal-api-net:latest
+#         imagePullPolicy: Never # Always | Never | IfNotPresent ##Opcional
+#         ports:
+#           - containerPort: 8080
+#         resources:
+#           requests:
+#             cpu: "100m"
+#             memory: "128Mi"
+#           limits:
+#             cpu: "200m"
+#             memory: "256Mi"
+#         startupProbe:
+#           httpGet:
+#             path: /health
+#             port: 8080
+#           periodSeconds: 10
+#           failureThreshold: 30 # 5 minutos
+#         readinessProbe:
+#           httpGet:
+#             path: /health
+#             port: 8080
+#           initialDelaySeconds: 5
+#           periodSeconds: 10
+#           failureThreshold: 3
+#         livenessProbe:
+#           httpGet:
+#             path: /health
+#             port: 8080
+#           initialDelaySeconds: 5
+#           periodSeconds: 15
+#           failureThreshold: 2
+

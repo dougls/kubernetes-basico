@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minimal-api-net
+  namespace: prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minimal-api
+  template:
+    metadata:
+      labels:
+        app: minimal-api
+    spec:
+      containers:
+      - name: api-container
+        image: minimal-api-net:latest
+        imagePullPolicy: Never # Always | Never | IfNotPresent ##Opcional
+        env:
+        - name: DB_CONNECTION_STRING
+          valueFrom:
+            secretKeyRef:
+              name: minimal-api-secret
+              key: DB_CONNECTION_STRING
+        - name: ENVIRONMENT_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: minimal-api-cm
+              key: ENVIRONMENT_NAME
+        volumeMounts:
+        - name: file-volume
+          mountPath: /app
+          readOnly: true
+        ports:
+        - containerPort: 8080 # API
+          # - containerPort: 9090 # modulo do Prometheus
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          failureThreshold: 2
+      volumes:
+      - name: file-volume
+        configMap:
+          name: minimal-api-cm-file
+

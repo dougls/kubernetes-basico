@@ -1,5 +1,5 @@
 # Etapa 1: Build da Aplicação
-FROM [mcr.microsoft.com/dotnet/sdk:10.0](https://mcr.microsoft.com/dotnet/sdk:10.0) AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 # Restaura dependências primeiro para aproveitar o cache de camadas do Docker
@@ -11,7 +11,7 @@ COPY . .
 RUN dotnet publish "K8sCourseApi.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 # Etapa 2: Runtime (Imagem menor e mais segura usando Alpine)
-FROM [mcr.microsoft.com/dotnet/aspnet:10.0-alpine](https://mcr.microsoft.com/dotnet/aspnet:10.0-alpine) AS final
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine AS final
 WORKDIR /app
 EXPOSE 8080
 

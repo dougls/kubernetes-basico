@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backup-diario
+spec:
+  schedule: "*/5 * * * *"
+  concurrencyPolicy: Forbid # Roda 1 por vez
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: backup
+            image: alpine
+            command: ["sh", "-c", "echo 'Gerando backup..'"]

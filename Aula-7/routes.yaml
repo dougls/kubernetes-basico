@@ -1,0 +1,19 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: minimal-api-route
+  namespace: prod
+spec:
+  parentRefs:
+  - name: gateway-fiap-prod
+    namespace: network
+  hostnames:
+  - "api.k8scourse.local"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: minimal-api-svc
+      port: 80

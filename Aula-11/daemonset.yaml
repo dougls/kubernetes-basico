@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: agent-datadog
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app: datadog
+  template:
+    metadata:
+      labels:
+        app: datadog
+    spec:
+      nodeSelector: 
+        kubernetes.io/os: linux
+      containers:
+      - name: datadog
+        image: datadog/agent:latest
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 150m
+            memory: 170Mi

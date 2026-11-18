@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc-solto
+  namespace: prod
+spec:
+  storageClassName: "ssd-rapido"
+  accessModes:
+    - ReadWriteOnce # ReadOnlyMany # ReadWriteMany # ReadWriteOncePod 
+  resources:
+    requests:
+      storage: 10Gi
+    limits:
+      storage: 15Gi
+      
