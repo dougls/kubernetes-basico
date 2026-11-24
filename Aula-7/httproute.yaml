@@ -5,15 +5,19 @@ metadata:
   namespace: prod
 spec:
   parentRefs:
-  - name: gateway-fiap-prod
+  - name: prod-gateway
     namespace: network
   hostnames:
-  - "api.k8scourse.local"
+  - "api.k8scluster.local"
   rules:
   - matches:
     - path:
         type: PathPrefix
-        value: /
+        value: /v1/vendas
     backendRefs:
     - name: minimal-api-svc
       port: 80
+      weight: 90 # Canary deploy
+    - name: minimal-api-np
+      port: 80
+      weight: 10

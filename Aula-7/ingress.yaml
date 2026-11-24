@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minimal-api-ingress
+  namespace: prod
+  annotations:
+    alb.ingress.kubernetes.io/auth-session-cookie: Ingress
+    alb.ingress.kubernetes.io/auth-session-timeout: '604800'
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: api.k8scourse.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: minimal-api-svc
+            port:
+              number: 80
